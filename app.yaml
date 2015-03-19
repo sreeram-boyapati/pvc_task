@@ -1,0 +1,19 @@
+pplication: pvc-task
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: true
+
+
+libraries:
+- name: webapp2
+  version: latest
+- name: jinga2
+  version: latest
+
+handlers:
+    -url: /stylesheets
+    static_dir: stylesheets
+    -url: /.*
+    script: server.application
+
