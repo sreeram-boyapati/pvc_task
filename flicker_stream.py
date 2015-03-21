@@ -1,7 +1,9 @@
-import requests
-import os
-import shutil
 import constants
+import os
+import requests
+import shutil
+import sys
+import traceback
 
 FLICKER_URL = "https://api.flickr.com/services/rest"
 
@@ -15,6 +17,9 @@ def request_stream(tag=None, data=None):
 
 
 def make_url(**kwargs):
+    """
+    Generates URL from server, farm.
+    """
     FLICKR_PHOTO_URL = "https://farm{farm}.staticflickr.com/{server}/{id}_{secret}.jpg"
     return FLICKR_PHOTO_URL.format(**kwargs)
 
@@ -24,10 +29,11 @@ def test_request(tags=None):
     """
     if tags is None:
         return
+    string_tags = ",".join(tags)
     data = {
         "api_key": constants.FLICKR_KEY,
         "method": "flickr.photos.search",
-        "tags": tags,
+        "tags": string_tags,
         "format": "json",
         "nojsoncallback": 1,
         "per_page": 500
@@ -36,31 +42,45 @@ def test_request(tags=None):
     photos = response["photos"]["photo"]
     for photo in photos:
         try:
-            get_image(tag=tags, **photo)
+            get_image(tags=tags, **photo)
         except:
+            tb= traceback.format_exc()
             errors = open('errors.txt', 'a+')
             errors.write(make_url(**photo)+"\n")
+            errors.write(tb+"\n\n")
+        break
 
 
-def get_image(tag="misc", **kwargs):
+def save_image_to_local(photo_url, tag, id):
     """
-    Given urls, download the image.
+    Saves locally.
     """
-    if not kwargs.get("id"):
-        return
-    photo_url = make_url(**kwargs)
-    file_ext = photo_url[-4:]
-    print photo_url
     response = requests.get(photo_url, stream=True)
     folder_path = os.path.join(os.getcwd(), "photos", tag)
+    print folder_path
+    file_ext = photo_url[-4:]
+    photo_file_url = os.path.join(folder_path, id + file_ext)
+    print photo_file_url
     if not os.path.exists(folder_path):
         os.makedirs(folder_path)
-    photo_file_url = os.path.join(folder_path, kwargs.get("id")+ file_ext)
     with open(photo_file_url, 'w') as out_file:
         shutil.copyfileobj(response.raw, out_file)
     del response
 
 
+def get_image(tags=None, **kwargs):
+    """
+    Given urls, download the image.
+    """
+    if not kwargs.get("id") or tags is None:
+        return
+    photo_url = make_url(**kwargs)
+    save_image_to_local(photo_url, tags[0], kwargs.get("id"))
 
 if __name__ == "__main__":
-    test_request(tags="dogs")
+    print sys.argv
+    if len(sys.argv)  > 1:
+        tags = []
+        for i in range(1, len(sys.argv)):
+            tags.append(sys.argv[i])
+        test_request(tags=tags)
