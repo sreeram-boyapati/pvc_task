@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load generic_tags %}
+
+{% block extra_css %}
+{% endblock %}
+
+{% block page %}
+<div id="form-category-container">
+    <input id="category-text" type="text"> </input>
+    <button id="category-submit">Add a Category.</button>
+    <div id="error-status"></div>
+</div>
+<div id="caffe-options">
+    <button id="train-model">Train</button>
+    <button id="test-model">Text</button>
+    <div id="caffe-test-results"></div>
+</div>
+<div id="images-container">
+</div>
+{% endblock %}
+{% block extra_js %}
+    <script type="text/javascript">
+        $("#category-submit").live("click", function(){
+            var category_text = $("catgory-text").text();
+            if(category_text === ""){
+                $("error-status").html("Please give a category.");
+                return 0;
+            }
+            var data = {
+                "category": category_text,
+            };
+            $.ajax({
+                url: "/utility/get_photos/", 
+                data: data,
+                type: "GET",
+                success: function(response){
+                    if(response["status"]==="OK"){
+                        $("#images-container").append(response["html_text"]);
+                        $("#job-id").append(response["job_id"]);
+                    }
+                }
+            });
+        });
+        $("#train-model").live("click", function(){
+            var job_id = $("#job-id").text();
+            var no_images = $("#images-container").children().length;
+            if(job_id === "" || no_images == 0){
+                $("error-status").html("Category not given or Images not found for training model.");            
+            }
+            data = {
+                "job_id": job_id; 
+            };
+            $.ajax({
+                url: "/utility/train_model/"
+                type: "POST",
+                data: data;
+                success: function(response){
+                    if(response["status"]=="OK"){
+                        $("#error-status").html("Model Successfully Trained");
+                    }
+                    else{
+                        $("#error-status").html(response["html_status"]);
+                    }
+                }
+            });
+        });
+
+        $("#test-model").live("click", function(){
+            var job_id = $("#job-id").text();
+            var no_images = $("#images-container").children().length;
+            if(job_id === "" || no_images == 0){
+                $("#error-status").html("Category not given or Images not found for testing model.");            
+            }
+            data = {
+                "job_id": job_id; 
+            };
+            $.ajax({
+                url: "/utility/test_model/"
+                type: "POST",
+                data: data;
+                success: function(response){
+                    if(response["status"]=="OK"){
+                        $("#error-status").html("Model Successfully Tested.");
+                        $("caffe-test-results").append(response["html_text"]);
+                    }
+                    else{
+                        $("#error-status").html(response["html_text"]);
+                    }
+                }
+            });
+        });
+    </script>
+{% endblock %}
