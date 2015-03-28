@@ -7,22 +7,11 @@ from django.core.files import File
 
 # Create your models here.
 class Photo(models.Model):
-    file_url = models.TextField(unique=True)
-    image = models.ImageField(upload_to='/media/', blank=True)
-
-    def cache(self):
-        """Store image locally if we have a URL"""
-
-        if self.url and not self.image:
-            result = urllib.urlretrieve(self.url)
-            self.image.save(
-                os.path.basename(self.url),
-                File(open(result[0])),
-            )
-            self.save()
+    photo_url = models.TextField(unique=True)
+    image = models.ImageField(upload_to='', blank=True)
 
     def __unicode__(self):
-        files_list = self.file_url.split('/')
+        files_list = self.photo_url.split('/')
         return files_list[-1]
 
 

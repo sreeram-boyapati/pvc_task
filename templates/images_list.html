@@ -1,0 +1,6 @@
+{% load generic_tags %}
+{% for photo in photos %}
+    <div class="photo_frame">
+        <img src="{{ photo.photo_url }}"></img>
+    </div>
+{% endfor %}

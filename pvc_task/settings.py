@@ -1,5 +1,5 @@
 # Django settings for pvc_task project.
-
+import django.conf.global_settings as DEFAULT_SETTINGS
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -7,7 +7,8 @@ ADMINS = (
     # ('Your Name', 'your_email@example.com'),
 )
 import os
-DJANGO_ROOT = os.dirname(os.getcwd())
+SETTINGS_DIR = os.path.dirname(__file__)
+DJANGO_ROOT  = os.path.abspath(os.path.dirname(SETTINGS_DIR))
 MANAGERS = ADMINS
 
 DATABASES = {
@@ -62,12 +63,13 @@ STATIC_ROOT = os.path.join(DJANGO_ROOT, '/static/')
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
 STATIC_URL = '/static/'
-
+STATIC_PATH = os.path.abspath(os.path.join(DJANGO_ROOT, "static_media"))
 # Additional locations of static files
 STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    STATIC_PATH,
 )
 
 # List of finder classes that know how to find static files in
@@ -102,11 +104,19 @@ ROOT_URLCONF = 'pvc_task.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'pvc_task.wsgi.application'
-
+TEMPLATE_PATH = os.path.join(DJANGO_ROOT, "templates")
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
+    TEMPLATE_PATH,
+)
+
+TEMPLATE_CONTEXT_PROCESSORS = DEFAULT_SETTINGS.TEMPLATE_CONTEXT_PROCESSORS + (
+    "django.core.context_processors.request",
+    "allauth.account.context_processors.account",
+    "allauth.socialaccount.context_processors.socialaccount",
+
 )
 
 INSTALLED_APPS = (
@@ -117,10 +127,18 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'south',
+    'homepage',
+    'utilityapp',
     # Uncomment the next line to enable the admin:
-    # 'django.contrib.admin',
+    'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
-    # 'django.contrib.admindocs',
+    'django.contrib.admindocs',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    # ... include the providers you want to enable:
+    'allauth.socialaccount.providers.facebook',
+    'allauth.socialaccount.providers.google',
 )
 
 # A sample logging configuration. The only tangible logging

@@ -30,8 +30,7 @@
                 "category": category_text,
             };
             $.ajax({
-                url: "/utility/get_photos/", 
-                data: data,
+                url: "/utility/get_photos?category="+category_text, 
                 type: "GET",
                 success: function(response){
                     if(response["status"]==="OK"){

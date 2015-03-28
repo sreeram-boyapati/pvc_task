@@ -23,9 +23,10 @@ def make_url(**kwargs):
     FLICKR_PHOTO_URL = "https://farm{farm}.staticflickr.com/{server}/{id}_{secret}.jpg"
     return FLICKR_PHOTO_URL.format(**kwargs)
 
-def test_request(tags=None):
+
+def fetch_request(tags=None):
     """
-    Test the request.
+    Fetch the Images.
     """
     if tags is None:
         return
@@ -40,27 +41,26 @@ def test_request(tags=None):
     }
     response = request_stream(data=data)
     photos = response["photos"]["photo"]
+    photo_tuples = []
+    i = 0
     for photo in photos:
+        if i==5:
+            break
+        i++
         try:
-            get_image(tags=tags, **photo)
+            photo_tuples.append(get_image(tags=tags, **photo))
         except:
-            tb= traceback.format_exc()
+            tb = traceback.format_exc()
             errors = open('errors.txt', 'a+')
             errors.write(make_url(**photo)+"\n")
             errors.write(tb+"\n\n")
-        break
+    return photo_tuples
 
 
-def save_image_to_local(photo_url, tag, id):
+def save_image_to_local(response, folder_path,  photo_file_url):
     """
     Saves locally.
     """
-    response = requests.get(photo_url, stream=True)
-    folder_path = os.path.join(os.getcwd(), "photos", tag)
-    print folder_path
-    file_ext = photo_url[-4:]
-    photo_file_url = os.path.join(folder_path, id + file_ext)
-    print photo_file_url
     if not os.path.exists(folder_path):
         os.makedirs(folder_path)
     with open(photo_file_url, 'w') as out_file:
@@ -75,7 +75,14 @@ def get_image(tags=None, **kwargs):
     if not kwargs.get("id") or tags is None:
         return
     photo_url = make_url(**kwargs)
+    tag = tags[0]
+    # response = requests.get(photo_url, stream=True)
+    folder_path = os.path.join(os.getcwd(), "photos", tag)
+    print folder_path
+    file_ext = photo_url[-4:]
+    photo_file_url = os.path.join(folder_path, id + file_ext)
     save_image_to_local(photo_url, tags[0], kwargs.get("id"))
+    return (photo_url, photo_file_url)
 
 if __name__ == "__main__":
     print sys.argv
@@ -83,4 +90,4 @@ if __name__ == "__main__":
         tags = []
         for i in range(1, len(sys.argv)):
             tags.append(sys.argv[i])
-        test_request(tags=tags)
+        fetch_request(tags=tags)
