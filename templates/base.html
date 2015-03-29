@@ -1,36 +1,36 @@
-{% load generic_tags %}
 <html lang="en">
     <head>
         <title>
             {% block title %}
             {% endblock %} | CloudCV
         </title>
-        <link href="{{ STATIC_URL }}/base/base.css" rel="stylesheet"/>
+        <link rel="stylesheet" href="{{ STATIC_URL }}base/base.css"/>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"/>
         {% block extra_css %}
         {% endblock %}
     </head>
     <body>
         <!-- HEADER -->
-        <div id="main_header" class="page_borders">
-            <div id="header_title">
+        <div id="main-header" class="page-borders">
+            <div id="header-title">
+                CLOUDCV HomePage
             </div><!-- header_title -->
-            <div id="sign_up">
-                <button class="btn btn-large btn-grey signup_original">
+            {% if not user.is_authenticated %}
+            <div id="sign-up">
+                <button class="btn btn-large btn-grey signup-original">
                     SignUp
                 </button>
             </div>
+            {% endif %}
         </div>
         {% block page %}
         {% endblock %}
         <!-- FOOTER -->
-        <div id="main_footer" class="page_borders">
+        <div id="main-footer" class="page-borders">
         </div>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
         {% block extra_js %}
         {% endblock %}
     </body>
-
-
 </html>

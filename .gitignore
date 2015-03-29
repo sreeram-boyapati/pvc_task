@@ -1,7 +1,7 @@
-constants.py
 .ropeproject
 photos
 *.pyc
 static
-
-
+utilityapp/constants.py
+migrations
+errors.txt

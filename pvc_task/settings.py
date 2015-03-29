@@ -47,7 +47,8 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = os.path.join(DJANGO_ROOT, '/media/')
+
+MEDIA_ROOT = os.path.join(DJANGO_ROOT, 'media/')
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
@@ -63,7 +64,7 @@ STATIC_ROOT = os.path.join(DJANGO_ROOT, 'static/')
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
 STATIC_URL = '/static/'
-STATIC_PATH = os.path.abspath(os.path.join(DJANGO_ROOT, "static_media"))
+STATIC_PATH = os.path.abspath(os.path.join(DJANGO_ROOT, "static_media/"))
 # Additional locations of static files
 STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
@@ -133,6 +134,7 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
 
     'homepage',
+    'core',
     'utilityapp',
     'allauth',
     'allauth.account',
@@ -141,6 +143,9 @@ INSTALLED_APPS = (
     'allauth.socialaccount.providers.facebook',
     'allauth.socialaccount.providers.google',
 )
+
+SITE_ID = 1
+LOGIN_REDIRECT_URL = '/'
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

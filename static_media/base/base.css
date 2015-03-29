@@ -1,0 +1,28 @@
+#main-header {
+    background: #fff;
+
+}
+
+#header-title{
+    font-weight: 3em;
+    text-align: center;
+}
+
+.photo-frame {
+    margin-left: 15px;
+    margin-bottom: 5px;
+    float: left
+}
+.clear {
+    clear: both
+}
+#images-container {
+    margin-top: 10px;
+}
+#error-status {
+    background: rgb(236, 93, 93);
+    border-radius: 5px;
+    margin: 15px;
+    padding: 5px 10px;
+    max-width: 500px;
+}

@@ -44,16 +44,10 @@ def fetch_request(tags=None):
     photo_tuples = []
     i = 0
     for photo in photos:
-        if i==5:
+        if i == 5:
             break
-        i++
-        try:
-            photo_tuples.append(get_image(tags=tags, **photo))
-        except:
-            tb = traceback.format_exc()
-            errors = open('errors.txt', 'a+')
-            errors.write(make_url(**photo)+"\n")
-            errors.write(tb+"\n\n")
+        i += 1
+        photo_tuples.append(get_image(tags=tags, **photo))
     return photo_tuples
 
 
@@ -76,17 +70,11 @@ def get_image(tags=None, **kwargs):
         return
     photo_url = make_url(**kwargs)
     tag = tags[0]
-    # response = requests.get(photo_url, stream=True)
-    folder_path = os.path.join(os.getcwd(), "photos", tag)
-    print folder_path
-    file_ext = photo_url[-4:]
-    photo_file_url = os.path.join(folder_path, id + file_ext)
-    save_image_to_local(photo_url, tags[0], kwargs.get("id"))
-    return (photo_url, photo_file_url)
+    return photo_url
 
 if __name__ == "__main__":
     print sys.argv
-    if len(sys.argv)  > 1:
+    if len(sys.argv) > 1:
         tags = []
         for i in range(1, len(sys.argv)):
             tags.append(sys.argv[i])

@@ -1,9 +1,11 @@
 import os
+import urllib
 import uuid
 
 from itertools import chain
 
 from django.db import models
+from django.core.files import File
 from django.contrib.auth.models import User
 
 
@@ -16,8 +18,19 @@ def photo_upload_path(instance, filename):
 
 # Create your models here.
 class Photo(models.Model):
-    photo_url = models.TextField(unique=True)
-    image = models.ImageField(upload_to=photo_upload_path, blank=True)
+    photo_url = models.URLField(max_length=512)
+    image = models.ImageField(upload_to=photo_upload_path,
+                              null=True,
+                              blank=True)
+
+    def save(self, *args, **kwargs):
+        if self.photo_url and not self.image:
+            result = urllib.urlretrieve(self.photo_url)
+            self.image.save(
+                os.path.basename(self.photo_url),
+                File(open(result[0]))
+            )
+        super(Photo, self).save(*args, **kwargs)
 
     def __unicode__(self):
         files_list = self.photo_url.split('/')
