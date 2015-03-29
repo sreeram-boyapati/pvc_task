@@ -1,0 +1,90 @@
+import os
+import uuid
+
+from itertools import chain
+
+from django.db import models
+from django.contrib.auth.models import User
+
+
+def photo_upload_path(instance, filename):
+    random = str(uuid.uuid1())
+    random = random[:7]
+    filename = random + filename
+    return os.path.join('photos', filename)
+
+
+# Create your models here.
+class Photo(models.Model):
+    photo_url = models.TextField(unique=True)
+    image = models.ImageField(upload_to=photo_upload_path, blank=True)
+
+    def __unicode__(self):
+        files_list = self.photo_url.split('/')
+        return files_list[-1]
+
+
+class Job(models.Model):
+    """
+        Describes a job.
+    """
+    user = models.ForeignKey(User, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def cv_user_(self):
+        if self.user is None:
+            return "Anonymous User"
+        else:
+            return self.user
+
+    cv_user = property(cv_user_)
+
+
+class PhotoCategory(models.Model):
+    category = models.CharField(max_length=256, db_index=True)
+    # Foreign key is a nasty relationship.
+    photos = models.ManyToManyField(Photo)
+
+    def __unicode__(self):
+        return self.category
+
+
+class AbstractTask(models.Model):
+    """
+    SubTasks of a job.
+    """
+    job = models.ForeignKey(Job)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        abstract = True
+
+
+class FetchTask(AbstractTask):
+    """
+     Fetch Images for a category.
+    """
+    categories = models.ManyToManyField(PhotoCategory)
+
+
+class TrainTask(AbstractTask):
+    """
+    Many models can be used to train a Image.
+    Which one will be used here?
+    """
+    train_model = models.CharField(max_length=256)
+
+
+class TestTask(AbstractTask):
+    """
+    Test this model.
+    """
+    test_model = models.CharField(max_length=256)
+
+
+def get_all_tasks(job_id):
+    fetch_tasks = FetchTask.objects.filter(id=job_id)
+    train_tasks = TrainTask.objects.filter(id=job_id)
+    test_tasks = TestTask.objects.filter(id=job_id)
+
+    return list(chain(fetch_tasks, train_tasks, test_tasks))

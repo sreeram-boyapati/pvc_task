@@ -1,5 +1,5 @@
 from django.conf.urls import patterns, include, url
-from utilityapp.views import test_model_view, train_model_view, fetch_images
+from core.views import test_model_view, train_model_view, fetch_images
 
 urlpatterns = patterns(
     '',

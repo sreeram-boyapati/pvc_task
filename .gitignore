@@ -2,5 +2,6 @@ constants.py
 .ropeproject
 photos
 *.pyc
+static
 
 

@@ -1,13 +1,13 @@
 from django.conf.urls import patterns, include, url
-import utilityapp
+import core
 # Uncomment the next two lines to enable the admin:
-# from django.contrib import admin
-# admin.autodiscover()
-
+from django.contrib import admin
+admin.autodiscover()
+import homepage
 urlpatterns = patterns(
     '',
     # Examples:
-    # url(r'^$', 'pvc_task.views.home', name='home'),
+    url(r'^$', homepage.views.get_homepage, name='home'),
     # url(r'^pvc_task/', include('pvc_task.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
@@ -15,5 +15,5 @@ urlpatterns = patterns(
 
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^utility/', include(utilityapp.urls)),
+    url(r'^core/', include(core.urls)),
 )
