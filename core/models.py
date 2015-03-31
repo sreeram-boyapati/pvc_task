@@ -77,7 +77,8 @@ class FetchTask(AbstractTask):
     """
      Fetch Images for a category.
     """
-    categories = models.ManyToManyField(PhotoCategory)
+    category = models.ForeignKey(PhotoCategory)
+    cost_incurred = models.BooleanField(default=False)
 
 
 class TrainTask(AbstractTask):
