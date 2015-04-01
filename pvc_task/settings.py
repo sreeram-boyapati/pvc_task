@@ -32,7 +32,7 @@ TIME_ZONE = 'America/Chicago'
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en-us'
 
-SITE_ID = 1
+SITE_ID = 2
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
@@ -139,14 +139,21 @@ INSTALLED_APPS = (
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-# ... include the providers you want to enable:
+    # ... include the providers you want to enable:
     'allauth.socialaccount.providers.facebook',
     'allauth.socialaccount.providers.google',
 )
 
-SITE_ID = 1
 LOGIN_REDIRECT_URL = '/'
 
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': ['profile', 'email'],
+        'AUTH_PARAMS': { 'access_type': 'online' },
+    }
+}
+
+ACCOUNT_SIGNUP_FORM_CLASS = "core.forms.SignupForm"
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
 # the site admins on every HTTP 500 error when DEBUG=False.
