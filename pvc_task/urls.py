@@ -3,7 +3,7 @@ import core
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
-from homepage.views import get_homepage
+from homepage.views import get_homepage, signup_view
 urlpatterns = patterns(
     '',
     # Examples:
@@ -16,6 +16,11 @@ urlpatterns = patterns(
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
     url(r'^core/', include('core.urls')),
-    url(r'^accounts/', include('allauth.urls')),
-
+    # to override django all auth override.
+    url(r'^accounts/logout/$',
+        'django.contrib.auth.views.logout',
+        {'next_page': '/', }),
+    # You see all auth 0.9.0 is hard to override. just point it to something
+    # else for peace of mind.
+    url(r'^account/', include('allauth.urls')),
 )

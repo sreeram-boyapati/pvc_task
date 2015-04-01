@@ -16,16 +16,24 @@
                 CLOUDCV HomePage
             </div><!-- header_title -->
             {% if not user.is_authenticated %}
-            {% load socialaccount %}    
-            {% load socialaccount_tags %}
-            <div id="Sign-In">
-                <a href='{% provider_login_url "google" method="oauth2" next="/" %}'>
-                <button class="btn btn-large btn-grey signup-original">
-                    Sign In with google
-                </button>
-                </a>
-            </div>
-            {% endif %}
+                {% load socialaccount %}    
+                {% load socialaccount_tags %}
+                <div id="sign-in">
+                    <a href='{% provider_login_url "google" method="oauth2" next="/" %}'>
+                    <button class="btn btn-large btn-grey signup-original">
+                        Sign In with google
+                    </button>
+                    </a>
+                </div>
+            {% else %}
+                <div id="logout">
+                    <a href="/accounts/logout/">
+                        <button class="btn btn-large btn-grey signup-original">
+                            Logout
+                        </button>
+                    </a>
+                </div>
+            {% endif %}    
         </div>
         {% block page %}
         {% endblock %}

@@ -32,6 +32,7 @@ def get_or_create_job(request):
     job = None
     print request.session
     if not request.session.get("job_id"):
+        print "Job Found"
         job = Job()
         if request.user.id:
             job.user = request.user
@@ -40,6 +41,13 @@ def get_or_create_job(request):
     else:
         job_id = request.session["job_id"]
         job = Job.objects.get(id=job_id)
+        if job.user is None and request.user is not None:
+            # a user has registered. create a new job id for him.
+            print "New Job for user"
+            job = Job()
+            job.user = request.user
+            job.save()
+            request.session.job_id = job.id
     return job
 
 
@@ -66,14 +74,15 @@ def fetch_images(request, category):
     if photo_cat_set:
         photo_category = photo_cat_set[0]
         photos = photo_category.photos.all()
-        f_task = FetchTask(job=job, category=photo_category)
+        f_task = FetchTask(job=job, category_id=photo_category.id)
         f_task.save()
     else:
+        # Downloading images
         photo_category = PhotoCategory(category=category)
         photo_tuples = flickerstream.fetch_request(tags)
         photo_category.save()
         f_task = FetchTask(job=job,
-                           category=photo_category,
+                           category_id=photo_category.id,
                            cost_incurred=True)
         f_task.save()
         for each_url in photo_tuples:
@@ -85,8 +94,6 @@ def fetch_images(request, category):
     context = Context({
         "photos": photos
     })
-    print photos
     response["html_text"] = render_to_string("images_list.html", context)
     response["status"] = "OK"
-    print response
     return HttpResponse(json.dumps(response), content_type="application/json")

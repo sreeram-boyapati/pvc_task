@@ -145,6 +145,7 @@ INSTALLED_APPS = (
 )
 
 LOGIN_REDIRECT_URL = '/'
+ACCOUNT_EMAIL_VERIFICATION="none"
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
@@ -153,7 +154,7 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
-ACCOUNT_SIGNUP_FORM_CLASS = "core.forms.SignupForm"
+# ACCOUNT_SIGNUP_FORM_CLASS = "core.forms.SignupForm"
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
 # the site admins on every HTTP 500 error when DEBUG=False.
