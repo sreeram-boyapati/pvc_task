@@ -47,7 +47,7 @@ class Job(models.Model):
 
     def cv_user_(self):
         if self.user is None:
-            return "Anonymous User"
+            return None
         else:
             return self.user
 
@@ -55,13 +55,14 @@ class Job(models.Model):
 
     def __unicode__(self):
         user = self.cv_user_()
+        if user is None:
+            return "Anonymous User"
         return user.username
 
     def save(self, *args, **kwargs):
         if not self.id:
             self.created_at = datetime.datetime.now()
         return super(Job, self).save(*args, **kwargs)
-
 
 
 class PhotoCategory(models.Model):
@@ -86,7 +87,7 @@ class AbstractTask(models.Model):
     def save(self, *args, **kwargs):
         if not self.id:
             self.timestamp = datetime.datetime.now()
-        return super(timestamp, self).save(*args, **kwargs)
+        return super(AbstractTask, self).save(*args, **kwargs)
 
 
 class FetchTask(AbstractTask):

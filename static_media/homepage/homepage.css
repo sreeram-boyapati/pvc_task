@@ -1,0 +1,15 @@
+#caffe-options {
+    position: relative;
+    margin-top: 10px;
+}
+#test-caffe-model {
+    margin-left: 5px;
+}
+
+#train-caffe-model {
+    margin-left: 10px;
+}
+
+#images-container {
+    position: relative;
+}

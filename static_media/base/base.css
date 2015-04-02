@@ -1,11 +1,50 @@
 #main-header {
-    background: #fff;
+    background: #33626B;
+    width: 100%;
+    position: relative;
+    height: 45px;
+}
 
+body {
+    font-size: 10px;
+    font-family: 'Open Sans',sans-serif;
+    margin: 0;
+    word-spacing: 1px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    -webkit-font-smoothing: antialiased;
+}
+
+.navigation {
+    display: block;
+    max-width: 1100px;
+    margin: 0px auto;
+}
+
+.nav-bar {
+    padding-top: 5px;
+    position: relative;
+    right: 0;
+    float: right;
+    display: block;
+    margin: 0px;
 }
 
 #header-title{
-    font-weight: 3em;
-    text-align: center;
+    position: relative;
+    float: left;
+    padding: 10px 5px;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: larger;
+    background: rgb(158, 181, 181);
+}
+
+.clear {
+    clear: both;
 }
 
 .photo-frame {
@@ -15,6 +54,13 @@
 }
 .clear {
     clear: both
+}
+
+.main-page {
+    position: relative;
+    display: block;
+    margin-top: 50px;
+    margin-left: 100px;
 }
 #images-container {
     margin-top: 10px;

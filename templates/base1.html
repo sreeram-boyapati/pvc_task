@@ -12,28 +12,36 @@
     <body>
         <!-- HEADER -->
         <div id="main-header" class="page-borders">
-            <div id="header-title">
-                CLOUDCV HomePage
-            </div><!-- header_title -->
-            {% if not user.is_authenticated %}
-                {% load socialaccount %}    
-                {% load socialaccount_tags %}
-                <div id="sign-in">
-                    <a href='{% provider_login_url "google" method="oauth2" next="/" %}'>
-                    <button class="btn btn-large btn-grey signup-original">
-                        Sign In with google
-                    </button>
+            <div class="navigation">
+                <div id="header-title">
+                    <a href="/">
+                    CLOUDCV
                     </a>
-                </div>
-            {% else %}
-                <div id="logout">
-                    <a href="/accounts/logout/">
-                        <button class="btn btn-large btn-grey signup-original">
-                            Logout
+                </div><!-- header_title -->
+                <div class="nav-bar">
+                {% if not user.is_authenticated %}
+                    {% load socialaccount %}    
+                    {% load socialaccount_tags %}
+                    <div id="sign-in">
+                        <a href='{% provider_login_url "google" method="oauth2" next="/" %}'>
+                        <button class="btn btn-large btn-red signup-original">
+                            Sign In with google
                         </button>
-                    </a>
+                        </a>
+                    </div>
+                {% else %}
+                    <div id="logout">
+                        <a href="/accounts/logout/">
+                            <button class="btn btn-large btn-grey signup-original">
+                                Logout
+                            </button>
+                        </a>
+                    </div>
+                {% endif %}
                 </div>
-            {% endif %}    
+            </div>
+        </div>
+        <div class="clear">
         </div>
         {% block page %}
         {% endblock %}
